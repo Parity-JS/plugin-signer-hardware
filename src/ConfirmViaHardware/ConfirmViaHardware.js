@@ -93,32 +93,32 @@ class ConfirmViaHardware extends Component {
     });
   };
 
-  render() {
+  render () {
     const { address, isDisabled } = this.props;
     const { isSending } = this.state;
     const _isDisabled = isDisabled || !this.hardwareStore.isConnected(address);
 
     return (
-      <div className={styles.confirmForm}>
+      <div className={ styles.confirmForm }>
         <Form>
           {this.renderHint()}
-          <div data-effect="solid" data-for={`transactionConfirmForm${this.id}`} data-place="bottom" data-tip>
+          <div data-effect='solid' data-for={ `transactionConfirmForm${this.id}` } data-place='bottom' data-tip>
             <Button
-              className={styles.confirmButton}
-              isDisabled={_isDisabled || isSending}
+              className={ styles.confirmButton }
+              isDisabled={ _isDisabled || isSending }
               fullWidth
-              icon={<IdentityIcon address={address} button className={styles.signerIcon} />}
+              icon={ <IdentityIcon address={ address } button className={ styles.signerIcon } /> }
               label={
                 isSending ? (
-                  <FormattedMessage id="signer.txPendingConfirm.buttons.confirmBusy" defaultMessage="Confirming..." />
+                  <FormattedMessage id='signer.txPendingConfirm.buttons.confirmBusy' defaultMessage='Confirming...' />
                 ) : (
                   <FormattedMessage
-                    id="signer.txPendingConfirm.buttons.confirmRequest"
-                    defaultMessage="Confirm Request"
+                    id='signer.txPendingConfirm.buttons.confirmRequest'
+                    defaultMessage='Confirm Request'
                   />
                 )
               }
-              onClick={this.handleConfirm}
+              onClick={ this.handleConfirm }
             />
           </div>
         </Form>
@@ -126,32 +126,32 @@ class ConfirmViaHardware extends Component {
     );
   }
 
-  renderError() {
+  renderError () {
     const { error } = this.state;
 
-    return <div className={styles.error}>{error}</div>;
+    return <div className={ styles.error }>{error}</div>;
   }
 
-  renderHint() {
+  renderHint () {
     const { address, isDisabled } = this.props;
     const { isSending } = this.state;
     const _isDisabled = isDisabled || !this.hardwareStore.isConnected(address);
 
     if (isSending) {
       return (
-        <div className={styles.passwordHint}>
+        <div className={ styles.passwordHint }>
           <FormattedMessage
-            id="signer.sending.hardware.confirm"
-            defaultMessage="Please confirm the transaction on your attached hardware device"
+            id='signer.sending.hardware.confirm'
+            defaultMessage='Please confirm the transaction on your attached hardware device'
           />
         </div>
       );
     } else if (_isDisabled) {
       return (
-        <div className={styles.passwordHint}>
+        <div className={ styles.passwordHint }>
           <FormattedMessage
-            id="signer.sending.hardware.connect"
-            defaultMessage="Please attach your hardware device before confirming the transaction"
+            id='signer.sending.hardware.connect'
+            defaultMessage='Please attach your hardware device before confirming the transaction'
           />
         </div>
       );

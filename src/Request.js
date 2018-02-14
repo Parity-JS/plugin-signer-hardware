@@ -16,6 +16,6 @@ import SignerRequest from '@parity/ui/lib/Signer/Request';
 
 import ConfirmViaHardware from './ConfirmViaHardware';
 
-export default function Request({ ...props }) {
-  return <SignerRequest confirmElement={ConfirmViaHardware} {...props} />;
+export default function Request ({ ...props }) {
+  return <SignerRequest confirmElement={ ConfirmViaHardware } { ...props } />;
 }
