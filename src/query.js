@@ -15,5 +15,5 @@
 // along with Parity.  If not, see <http://www.gnu.org/licenses/>.
 
 export default function isHandler (payload, accounts, account) {
-  return !!(payload && account && account.hardware);
+  return !!(payload && account && account.meta.hardware);
 }
