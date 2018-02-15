@@ -22,6 +22,7 @@ import HardwareStore from '@parity/shared/lib/mobx/hardwareStore';
 import IdentityIcon from '@parity/ui/lib/IdentityIcon';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
 
 import styles from './ConfirmViaHardware.css';
 
@@ -49,37 +50,7 @@ class ConfirmViaHardware extends Component {
     const { api } = this.context;
     const { request, transaction } = this.props;
 
-    this.setState({ isSending: true });
-
-    let promise;
-
-    // CC Jaco
-    // All the below code is copied from https://github.com/paritytech/js-shared/blob/master/src/redux/providers/signerMiddleware.js
-    // It's a miracle if what I wrote blindly here doesn't have bugs
-    if (transaction) {
-      const hardwareAccount = this.hardwareStore.wallets[transaction.from];
-      const noncePromise =
-        !transaction.nonce || transaction.nonce.isZero()
-          ? api.parity.nextNonce(transaction.from)
-          : Promise.resolve(transaction.nonce);
-
-      switch (hardwareAccount.via) {
-        case 'ledger': {
-          promise = noncePromise
-            .then(nonce => {
-              transaction.nonce = nonce;
-
-              return this.hardwareStore.signLedger(transaction);
-            })
-            .then(rawData => api.signer.confirmRequestRaw(request.id, rawData));
-          break;
-        }
-        case 'parity':
-        default:
-          this.setState({ error: 'Not supported' });
-          return;
-      }
-    } else {
+    if (!transaction) {
       // Handle signing messages and decrypting with hardware wallet is not supported yet
       // request.sign is not empty if request was `eth_sign`
       // request.decrypt is not empty if request was ``parity_decryptMessage`
@@ -88,9 +59,19 @@ class ConfirmViaHardware extends Component {
       return;
     }
 
-    return promise.then(() => this.setState({ isSending: false })).catch(error => {
-      this.setState({ isSending: false, error: error && error.text });
-    });
+    this.setState({ isSending: true });
+
+    return api.signer
+      .confirmRequest(request.id, pick(transaction, ['condition', 'gas', 'gasPrice']), '')
+      .then(() => {
+        this.setState({ isSending: false });
+      })
+      .catch(error => {
+        this.setState({
+          isSending: false,
+          error: error && error.text
+        });
+      });
   };
 
   render () {
@@ -102,6 +83,7 @@ class ConfirmViaHardware extends Component {
       <div className={ styles.confirmForm }>
         <Form>
           {this.renderHint()}
+          {this.renderError()}
           <div data-effect='solid' data-for={ `transactionConfirmForm${this.id}` } data-place='bottom' data-tip>
             <Button
               className={ styles.confirmButton }
@@ -157,7 +139,14 @@ class ConfirmViaHardware extends Component {
       );
     }
 
-    return null;
+    return (
+      <div className={ styles.passwordHint }>
+        <FormattedMessage
+          id='signer.sending.hardware.next'
+          defaultMessage='Please start the hardware confirmation process via the button below'
+        />
+      </div>
+    );
   }
 }
 
