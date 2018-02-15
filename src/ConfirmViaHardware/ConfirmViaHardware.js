@@ -22,7 +22,7 @@ import HardwareStore from '@parity/shared/lib/mobx/hardwareStore';
 import IdentityIcon from '@parity/ui/lib/IdentityIcon';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import pick from 'lodash/pick';
+import pick from 'lodash.pick';
 
 import styles from './ConfirmViaHardware.css';
 
