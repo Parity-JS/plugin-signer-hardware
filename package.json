@@ -51,7 +51,7 @@
   "dependencies": {
     "@parity/ui": "^3.1.11",
     "lodash.pick": "^4.4.0",
-    "react-intl": "^2.4.0",
+    "react-intl": "^2.7.2",
     "semantic-ui-react": "^0.83.0"
   },
   "peerDependencies": {
