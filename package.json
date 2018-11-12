@@ -1,6 +1,6 @@
 {
   "name": "@parity/plugin-signer-hardware",
-  "version": "1.1.16",
+  "version": "1.1.17",
   "description": "Signer plugin handler for sending transactions from hardware devices",
   "main": "index.js",
   "scripts": {
